@@ -43,7 +43,7 @@ do
 done
 
 # Extract downloaded files
-files=$(ls | awk '(!/extract/ && (!/part/ || /part1/ || /part01/))')
+files=$(ls | awk '(!/extract/ && (!/part/ || /part1./ || /part01./))')
 
 mkdir -p extract
 
