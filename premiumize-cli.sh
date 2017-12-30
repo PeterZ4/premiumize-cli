@@ -2,7 +2,7 @@
 
 id="[USERID]"
 pass="[USERPASS]"
-
+downloadfolder="[PATH_TO_DOWNLOAD_FOLDER]"
 
 case "$1" in
 	*.dlc)
@@ -19,6 +19,9 @@ case "$1" in
 		echo "A File containing a list of URLs"
 		exit 1
 esac
+
+cd $downloadfolder
+
 for i in $links;
 do
 	JSON=$(curl -s "https://api.premiumize.me/pm-api/v1.php?method=directdownloadlink&params\[login\]=$id&params\[pass\]=$pass&params\[link\]=$i")
@@ -36,4 +39,14 @@ do
 	else
 		echo "Error:" $MESSAGE
 	fi
+done
+
+# Extract downloaded files
+files=$(ls | awk '(!/extract/ && (!/part/ || /part1/ || /part01/))')
+
+mkdir -p extract
+
+for file in $files;
+do              
+        unar -f -o extract $file
 done
