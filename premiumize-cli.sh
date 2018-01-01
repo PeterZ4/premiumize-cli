@@ -20,6 +20,7 @@ case "$4" in
 		exit 1
 esac
 
+mkdir -p $downloadfolder
 cd $downloadfolder
 
 for i in $links;
