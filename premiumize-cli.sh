@@ -1,18 +1,18 @@
 #!/bin/bash
 
-id="[USERID]"
-pass="[USERPASS]"
-downloadfolder="[PATH_TO_DOWNLOAD_FOLDER]"
+id="$1"
+pass="$2"
+downloadfolder="$3"
 
-case "$1" in
+case "$4" in
 	*.dlc)
-		links=$(curl -s 'http://dcrypt.it/decrypt/paste' --data-urlencode "content@$1" |jq -r .success.links|grep -Po ' "\K[^"]*')
+		links=$(curl -s 'http://dcrypt.it/decrypt/paste' --data-urlencode "content@$4" |jq -r .success.links|grep -Po ' "\K[^"]*')
 		;;
 	*.links)
-		links=$(cat $1)
+		links=$(cat $4)
 		;;
 	*.txt)
-		links=$(cat $1)
+		links=$(cat $4)
 		;;
 	*)
 		echo $"Usage: $0 { dlc-File | list-File }"
@@ -20,7 +20,6 @@ case "$1" in
 		exit 1
 esac
 
-mkdir -p $downloadfolder
 cd $downloadfolder
 
 for i in $links;
@@ -36,7 +35,7 @@ do
 		NAME=$(echo $JSON | jq -r .result.filename)
 
 		echo $NAME
-		curl --progress-bar -o $NAME $LOCATION
+		wget -c -O $NAME $LOCATION
 	else
 		echo "Error:" $MESSAGE
 	fi
